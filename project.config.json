@@ -2,7 +2,7 @@
   "miniprogramRoot": "./dist",
   "projectname": "taro-mini",
   "description": "微信小程序",
-  "appid": "touristappid",
+  "appid": "wxc87bc4e22a4f9cab",
   "setting": {
     "urlCheck": true,
     "es6": false,

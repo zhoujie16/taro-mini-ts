@@ -17,10 +17,11 @@ export default class Index extends Component {
 
   componentDidHide() {}
 
-  async testAjax() {
+  testAjax = async (): Promise<void> => {
     const [err, res] = await AjaxTestData();
     console.log("test Ajax", [err, res]);
-  }
+  };
+
   render() {
     return (
       <View className="index">

@@ -1,18 +1,18 @@
 /**
  * 配置文件
  */
-const devConfig = {
+const devConfig: any = {
   requsetUrl: "https://lincoln-mp-dev.yonyouauto.com", // 请求地址
-  ftpUrl: ""
+  ftpUrl: "",
 };
 
 //生产环境
-const proConfig = {
-  requsetUrl: "https://lincoln-mp-dev.yonyouauto.com", 
-  ftpUrl: ""
+const proConfig: any = {
+  requsetUrl: "https://lincoln-mp-dev.yonyouauto.com",
+  ftpUrl: "",
 };
 
-let config = devConfig;
+let config: any = devConfig;
 // let config = proConfig;
 
-module.exports = config;
+export default config;

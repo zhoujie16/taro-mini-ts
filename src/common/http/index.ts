@@ -7,22 +7,20 @@ import Taro from "@tarojs/taro";
 import AppConfig from "@/config/index.ts";
 
 class Http {
-  constructor(arg) {}
-  async sleep(timeLen) {
-    return new Promise((resolve) => {
+  sleep = (timeLen: number): Promise<void> =>
+    new Promise((resolve) => {
       setTimeout(resolve, timeLen);
     });
-  }
   /**
    * 发送请求
    */
-  async ajax({ url, method, data = {}, _config = {} }) {
-    const config = {
+  async ajax({ url, method, data = {}, _config = {} }): Promise<any[]> {
+    const config: any = {
       isLoading: false,
       showError: true,
       ..._config,
     };
-    let requestUrl = AppConfig.requsetUrl + url;
+    let requestUrl: string = AppConfig.requsetUrl + url;
     if (url.indexOf("http://") !== -1 || url.indexOf("https://") !== -1) {
       requestUrl = url;
     }
@@ -33,10 +31,8 @@ class Http {
     }
     console.log("http 请求 url: ", url);
     console.log("http 请求 参数: ", data);
-    let requestError = null;
-    let requestRes = {
-      data: null,
-    };
+    let requestError: any = null;
+    let requestRes: any = {};
     try {
       requestRes = await Taro.request({
         url: requestUrl,
@@ -63,12 +59,12 @@ class Http {
         icon: "none",
         duration: 2000,
       });
-      return null;
+      return ["error", null];
     }
-    const resultCode = requestRes.data.returnFlag;
+    const resultCode: number = requestRes.data.returnFlag;
     if (resultCode !== 0 || requestRes.data.data == null) {
+      const errMsg = requestRes.data.errorMsg;
       if (config.showError) {
-        const errMsg = requestRes.data.errorMsg;
         Taro.showToast({
           title: String(errMsg),
           icon: "none",
@@ -80,8 +76,8 @@ class Http {
     return [false, requestRes.data.data];
   }
 
-  async get(url, data, _config) {
-    const method = "GET";
+  async get(url: string, data: any, _config: any): Promise<any[]> {
+    const method: string = "GET";
     return await this.ajax({
       url,
       method,
@@ -90,8 +86,8 @@ class Http {
     });
   }
 
-  async post(url, data, _config) {
-    const method = "POST";
+  async post(url: string, data: any, _config: any): Promise<any[]> {
+    const method: string = "POST";
     return await this.ajax({
       url,
       method,

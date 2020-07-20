@@ -1,7 +1,6 @@
 /**
  * @Author: zhoujie
- * @Date: 2020-06-30
- * @Last Modified: 2020-06-30 zhoujie
+ * @Date: 2020-07-18
  **/
 import Taro from "@tarojs/taro";
 import AppConfig from "@/config/index.ts";

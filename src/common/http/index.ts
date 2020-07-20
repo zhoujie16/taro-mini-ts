@@ -6,7 +6,24 @@
 import Taro from "@tarojs/taro";
 import AppConfig from "@/config/index.ts";
 
-class Http {
+// 定义规则接口
+interface HttpRule {
+  baseURL: string;
+  sleep(timeLen: number): Promise<void>;
+  ajax(ajaxParams: AjaxParams): Promise<any[]>;
+  get(url: string, data: any, _config: any): Promise<any[]>;
+  post(url: string, data: any, _config: any): Promise<any[]>;
+}
+
+// 定义请求参数接口
+interface AjaxParams {
+  url: string;
+  method: any;
+  data?: any;
+  _config?: any;
+}
+class Http implements HttpRule {
+  baseURL = AppConfig.requsetUrl;
   sleep = (timeLen: number): Promise<void> =>
     new Promise((resolve) => {
       setTimeout(resolve, timeLen);
@@ -14,13 +31,14 @@ class Http {
   /**
    * 发送请求
    */
-  async ajax({ url, method, data = {}, _config = {} }): Promise<any[]> {
+  async ajax(ajaxParams: AjaxParams): Promise<any[]> {
+    const { url, method = "GET", data = {}, _config = {} } = ajaxParams;
     const config: any = {
       isLoading: false,
       showError: true,
       ..._config,
     };
-    let requestUrl: string = AppConfig.requsetUrl + url;
+    let requestUrl: string = this.baseURL + url;
     if (url.indexOf("http://") !== -1 || url.indexOf("https://") !== -1) {
       requestUrl = url;
     }
@@ -62,7 +80,7 @@ class Http {
       return ["error", null];
     }
     const resultCode: number = requestRes.data.returnFlag;
-    if (resultCode !== 0 || requestRes.data.data == null) {
+    if (resultCode !== 1) {
       const errMsg = requestRes.data.errorMsg;
       if (config.showError) {
         Taro.showToast({
@@ -73,7 +91,7 @@ class Http {
       }
       return [resultCode, errMsg];
     }
-    return [false, requestRes.data.data];
+    return [null, requestRes.data.data];
   }
 
   async get(url: string, data: any, _config: any): Promise<any[]> {
@@ -91,7 +109,7 @@ class Http {
     return await this.ajax({
       url,
       method,
-      data,
+      data: { ...data },
       _config,
     });
   }

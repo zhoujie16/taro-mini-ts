@@ -2,15 +2,15 @@
  * 配置文件
  */
 const devConfig: any = {
-  requsetUrl: "https://lincoln-mp-dev.yonyouauto.com", // 请求地址
+  requsetUrl: "http://music.163.zhoujie16.cn", // 请求地址
   ftpUrl: "",
 };
 
 //生产环境
-const proConfig: any = {
-  requsetUrl: "https://lincoln-mp-dev.yonyouauto.com",
-  ftpUrl: "",
-};
+// const proConfig: any = {
+//   requsetUrl: "http://music.163.zhoujie16.cn/",
+//   ftpUrl: "",
+// };
 
 let config: any = devConfig;
 // let config = proConfig;

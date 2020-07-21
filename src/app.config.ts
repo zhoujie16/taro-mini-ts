@@ -1,12 +1,14 @@
 export default {
   pages: [
-    'pages/demo/index',
-    'pages/index/index'
+    "pages/rank-list/index",
+    "pages/demo/index",
+    "pages/index/index",
+    "pages/rank-list-detail/index",
   ],
   window: {
-    backgroundTextStyle: 'light',
-    navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: 'WeChat',
-    navigationBarTextStyle: 'black'
-  }
-}
+    backgroundTextStyle: "light",
+    navigationBarBackgroundColor: "#fff",
+    navigationBarTitleText: "WeChat",
+    navigationBarTextStyle: "black",
+  },
+};

@@ -1,0 +1,40 @@
+.music-list-cell {
+  .music-list-cell__inner {
+    height: 120px;
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    .music-list-cell__num {
+      flex: 0 0 120px;
+      font-size: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .music-list-cell__info {
+      flex: 0 0 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .music-list-cell__name {
+        font-size: 28px;
+      }
+      .music-list-cell__desc {
+        font-size: 24px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 510px;
+      }
+    }
+    .music-list-cell__play {
+      flex: 0 0 120px;
+      height: 100%;
+      background-image: url(https://s1.ax1x.com/2020/07/21/UoCIeS.png);
+      background-size: 55px 55px;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  }
+}

@@ -1,24 +1,33 @@
-import React, { Component } from 'react'
-import { View, Text } from '@tarojs/components'
-import './index.scss'
+import React, { Component } from "react";
+import { View, Text } from "@tarojs/components";
+import "./index.scss";
 
 export default class Index extends Component {
+  componentWillMount() {
+    console.log("componentWillMount");
+  }
 
-  componentWillMount () { }
+  componentDidMount() {
+    console.log("componentDidMount");
+  }
 
-  componentDidMount () { }
+  componentWillUnmount() {
+    console.log("componentWillUnmount");
+  }
 
-  componentWillUnmount () { }
+  componentDidShow() {
+    console.log("componentDidShow");
+  }
 
-  componentDidShow () { }
+  componentDidHide() {
+    console.log("componentDidHide");
+  }
 
-  componentDidHide () { }
-
-  render () {
+  render() {
     return (
-      <View className='index'>
+      <View className="index">
         <Text>Hello world!</Text>
       </View>
-    )
+    );
   }
 }

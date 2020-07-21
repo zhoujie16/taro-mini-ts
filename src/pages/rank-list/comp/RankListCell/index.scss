@@ -1,0 +1,26 @@
+.rank-list-cell{
+  padding: 0 30px 30px 30px;
+  .rank-list-cell__inner{
+    display: flex;
+    .rank-list-cell__cover{
+      flex: 0 0 215px;
+      .rank-list-cell__cover-img{
+        width: 215px;
+        height: 215px;
+        background-color: #dddddd;
+        border-radius: 10px;
+      }
+    }
+    .rank-list-cell__info{
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding-left: 30px;
+      .rank-list-cell__text{
+        font-size: 28px;
+
+      }
+    }
+  }
+}

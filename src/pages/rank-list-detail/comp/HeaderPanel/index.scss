@@ -1,0 +1,30 @@
+.header-panel {
+  padding: 35px;
+  background-color: rgb(142, 69, 60);
+  .header-panel__inner {
+    display: flex;
+    .header-panel__cover {
+      width: 290px;
+      .header-panel__cover-img {
+        width: 290px;
+        height: 290px;
+        background-color: #dddddd;
+        border-radius: 10px;
+      }
+    }
+    .header-panel__info {
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px;
+      padding-right: 0;
+      .header-panel__info-title {
+        font-size: 36px;
+      }
+      .header-panel__info-sub-title {
+        font-size: 24px;
+      }
+    }
+  }
+}

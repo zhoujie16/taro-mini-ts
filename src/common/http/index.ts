@@ -78,9 +78,9 @@ class Http implements HttpRule {
       });
       return ["error", null];
     }
-    const resultCode: number = requestRes.data.returnFlag;
-    if (resultCode !== 1) {
-      const errMsg = requestRes.data.errorMsg;
+    const resultCode: number = requestRes.data.code;
+    if (resultCode !== 200) {
+      const errMsg = requestRes.data.errorMsg || "请求出错";
       if (config.showError) {
         Taro.showToast({
           title: String(errMsg),
@@ -90,7 +90,7 @@ class Http implements HttpRule {
       }
       return [resultCode, errMsg];
     }
-    return [null, requestRes.data.data];
+    return [null, requestRes.data];
   }
 
   async get(url: string, data: any, _config: any): Promise<any[]> {

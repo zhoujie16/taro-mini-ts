@@ -33,6 +33,10 @@ export default class Index extends Component<IProps> {
   // 播放按钮点击
   cellPlayBtnClick = (): void => {
     console.log("播放按钮点击", this.props.musicInfo);
+    // 去播放器页面
+    Taro.navigateTo({
+      url: `/pages/music-play/index?id=${this.props.musicInfo.id}`,
+    });
   };
 
   filterSubTitle = (): string => {

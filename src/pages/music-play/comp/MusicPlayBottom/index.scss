@@ -1,0 +1,55 @@
+.music-play-bottom {
+  height: 100%;
+  display: flex;
+  padding: 0 35px 0 35px;
+  .music-play-bottom__left {
+    height: 100%;
+    flex: 0 0 140px;
+    background-image: url("https://gitee.com/zz16/upic/raw/master/music163/cm2_icn_loop@3x.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 88px;
+  }
+  .music-play-bottom__center {
+    height: 100%;
+    flex: 0 0 400px;
+    display: flex;
+    .music-play-bottom__center--pre {
+      flex: 1;
+      height: 100%;
+      background-image: url("https://gitee.com/zz16/upic/raw/master/2020/07/ajh-w6dvrI.png");
+      background-size: 56px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .music-play-bottom__center {
+      flex: 1;
+      height: 100%;
+      background-size: 166px;
+      background-repeat: no-repeat;
+      background-position: center;
+      &.music-play-bottom__center--play {
+        background-image: url("https://gitee.com/zz16/upic/raw/master/music163/cm2_runfm_btn_play@3x.png");
+      }
+      &.music-play-bottom__center--pause {
+        background-image: url("https://gitee.com/zz16/upic/raw/master/music163/cm2_runfm_btn_pause@3x.png");
+      }
+    }
+    .music-play-bottom__center--next {
+      flex: 1;
+      height: 100%;
+      background-image: url("https://gitee.com/zz16/upic/raw/master/2020/07/ajb-WU2RWS.png");
+      background-size: 56px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+  .music-play-bottom__right {
+    height: 100%;
+    flex: 0 0 140px;
+    background-image: url("https://gitee.com/zz16/upic/raw/master/music163/cm2_play_btn_src_prs@3x.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 56px;
+  }
+}

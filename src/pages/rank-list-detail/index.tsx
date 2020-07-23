@@ -14,7 +14,7 @@ interface IState {
 
 export default class Index extends Component<IState> {
   // 路由传来的参数
-  routerParams: any;
+  routerParams: any = {};
 
   state = {
     playlist: {},

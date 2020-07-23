@@ -1,0 +1,35 @@
+.music-paly-header {
+  height: 100%;
+  display: flex;
+  color: #ffffff;
+  .music-paly-header__left {
+    height: 100%;
+    flex: 0 0 120px;
+    background-image: url("https://gitee.com/zz16/upic/raw/master/music163/cm2_act_view_btn_back@3x.png");
+    background-repeat: no-repeat;
+    background-size: 24px;
+    background-position: center;
+  }
+  .music-paly-header__title {
+    height: 100%;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .music-paly-header__al-name {
+      font-size: 30px;
+    }
+    .music-paly-header__ar-name {
+      font-size: 24px;
+    }
+  }
+  .music-paly-header__right {
+    height: 100%;
+    flex: 0 0 120px;
+    background-image: url("https://gitee.com/zz16/upic/raw/master/music163/cm6_list_detail_icn_share@3x.png");
+    background-repeat: no-repeat;
+    background-size: 56px;
+    background-position: center;
+  }
+}

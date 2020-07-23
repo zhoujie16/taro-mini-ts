@@ -72,7 +72,7 @@ class Http implements HttpRule {
     if (requestError) {
       // 请求发送时候失败
       Taro.showToast({
-        title: "请求发送失败, 请检查您的网络",
+        title: "网络开小差了",
         icon: "none",
         duration: 2000,
       });

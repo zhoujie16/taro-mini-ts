@@ -4,6 +4,7 @@ export default {
     "pages/demo/index",
     "pages/index/index",
     "pages/rank-list-detail/index",
+    'pages/music-play/index'
   ],
   window: {
     backgroundTextStyle: "light",

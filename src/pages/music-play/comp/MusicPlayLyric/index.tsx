@@ -4,38 +4,34 @@ import "./index.scss";
 import Taro from "@tarojs/taro";
 import Utils from "@/common/utils/index.ts";
 
+interface IProps {
+  songLyric: string;
+}
+
 interface IState {}
 
-export default class Index extends Component<IState> {
+export default class Index extends Component<IProps, IState> {
   state = {};
   constructor(props) {
     super(props);
   }
 
   componentWillMount() {
-    console.log("componentWillMount");
+    console.log(" componentWillMount");
   }
 
   componentDidMount() {
-    console.log("componentDidMount");
+    console.log(" componentDidMount");
   }
 
   componentWillUnmount() {
-    console.log("componentWillUnmount");
-  }
-
-  componentDidShow() {
-    console.log("componentDidShow");
-  }
-
-  componentDidHide() {
-    console.log("componentDidHide");
+    console.log(" componentWillUnmount");
   }
 
   render() {
     return (
-      <View className="index">
-        <Text>Hello world!</Text>
+      <View className="music-play-lyric">
+        <View className="music-play-lyric__inner">{this.props.songLyric}</View>
       </View>
     );
   }

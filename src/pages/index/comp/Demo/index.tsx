@@ -4,11 +4,11 @@ import "./index.scss";
 import Taro from "@tarojs/taro";
 import Utils from "@/common/utils/index.ts";
 
-interface IState {}
-
 interface IProps {}
 
-export default class Index extends Component<IState, IProps> {
+interface IState {}
+
+export default class Index extends Component<IProps, IState> {
   state = {};
   constructor(props) {
     super(props);

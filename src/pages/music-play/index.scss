@@ -1,0 +1,19 @@
+.page-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-image: url("https://gitee.com/zz16/upic/raw/master/music163/cm2_fm_bg@3x.jpg");
+  background-size: 100% 100%;
+  .music-play__header {
+    flex: 0 0 130px;
+  }
+  .music-play__content {
+    flex: 1 1 calc(100vh - 350px);
+    height: calc(100vh - 350px);
+  }
+  .music-play__bottom {
+    flex: 0 0 220px;
+  }
+}

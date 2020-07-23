@@ -5,7 +5,7 @@
   .music-play-bottom__left {
     height: 100%;
     flex: 0 0 140px;
-    background-image: url("https://gitee.com/zz16/upic/raw/master/music163/cm2_icn_loop@3x.png");
+    background-image: url("./../../imgs/c9p.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 88px;
@@ -17,7 +17,7 @@
     .music-play-bottom__center--pre {
       flex: 1;
       height: 100%;
-      background-image: url("https://gitee.com/zz16/upic/raw/master/2020/07/ajh-w6dvrI.png");
+      background-image: url("./../../imgs/bce.png");
       background-size: 56px;
       background-repeat: no-repeat;
       background-position: center;
@@ -29,16 +29,16 @@
       background-repeat: no-repeat;
       background-position: center;
       &.music-play-bottom__center--play {
-        background-image: url("https://gitee.com/zz16/upic/raw/master/music163/cm2_runfm_btn_play@3x.png");
+        background-image: url("./../../imgs/clj.png");
       }
       &.music-play-bottom__center--pause {
-        background-image: url("https://gitee.com/zz16/upic/raw/master/music163/cm2_runfm_btn_pause@3x.png");
+        background-image: url("./../../imgs/clh.png");
       }
     }
     .music-play-bottom__center--next {
       flex: 1;
       height: 100%;
-      background-image: url("https://gitee.com/zz16/upic/raw/master/2020/07/ajb-WU2RWS.png");
+      background-image: url("./../../imgs/bcb.png");
       background-size: 56px;
       background-repeat: no-repeat;
       background-position: center;
@@ -47,9 +47,9 @@
   .music-play-bottom__right {
     height: 100%;
     flex: 0 0 140px;
-    background-image: url("https://gitee.com/zz16/upic/raw/master/music163/cm2_play_btn_src_prs@3x.png");
+    background-image: url("./../../imgs/c_a.png");
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 56px;
+    background-size: 88px;
   }
 }

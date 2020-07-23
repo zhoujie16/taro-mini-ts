@@ -196,7 +196,7 @@ export default class Index extends Component<IState> {
       return item.time >= currentTime;
     });
     if (lineItemIndex > 0) {
-      const lineItem = lines[lineItemIndex - 1];
+      const lineItem = lines[lineItemIndex-1];
       lineItem.active = true;
       top = lineItem.index * 40;
       console.log(lineItem);

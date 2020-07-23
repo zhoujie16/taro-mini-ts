@@ -7,6 +7,7 @@ import MusicPlayBottom from "./comp/MusicPlayBottom";
 import MusicPlayCD from "./comp/MusicPlayCD";
 import MusicPlayLyric from "./comp/MusicPlayLyric";
 import MusicPlayHeader from "./comp/MusicPlayHeader";
+import LyricContext from "./comp/MusicPlayLyric/lyric-parser";
 
 interface IState {
   isPlay: boolean; // 是否正在播放中
@@ -18,13 +19,20 @@ interface IState {
 export default class Index extends Component<IState> {
   routerParams: any = {};
   innerAudioContext: any; // 音乐播放上下文
+  lyricContext: any;
   musicUrl: string;
   state: any = {
     isPlay: false,
     songDetail: {},
     songLyric: "",
+    songLyricLines: [], // 歌词格式化的数组
     songUrl: "",
+    currentTime: 0,
+    lines: [],
+    top: 0,
+    cdAndLyricFlag: true,
   };
+
   constructor(props) {
     super(props);
   }
@@ -76,15 +84,23 @@ export default class Index extends Component<IState> {
     console.log("res_song_url", res_song_url);
     const songUrl = res_song_url.data[0].url;
 
+    this.lyricContext = new LyricContext(songLyric, () => {});
+    console.log("this.lyricContext", this.lyricContext);
     this.setState(
       {
         songDetail,
         songLyric,
         songUrl,
+        songLyricLines: this.lyricContext.lines,
       },
       () => {
         console.log("music play state", this.state);
         this.createInnerAudioContext();
+        const { top, lines } = this.cumputeTopAndLine();
+        this.setState({
+          lines,
+          top,
+        });
       }
     );
   };
@@ -120,9 +136,11 @@ export default class Index extends Component<IState> {
     });
     this.innerAudioContext.onPlay(() => {
       console.log("onPlay");
+      this.setCurrentTime();
     });
     this.innerAudioContext.onPause(() => {
       console.log("onPause");
+      this.setCurrentTime();
     });
     this.innerAudioContext.onStop(() => {
       console.log("onStop");
@@ -131,8 +149,8 @@ export default class Index extends Component<IState> {
       console.log("onEnded");
     });
     this.innerAudioContext.onTimeUpdate(() => {
-      const { currentTime } = this.innerAudioContext;
-      console.log("onTimeUpdate", currentTime);
+      console.log("onTimeUpdate");
+      this.setCurrentTime();
     });
     this.innerAudioContext.onWaiting(() => {
       console.log("onWaiting");
@@ -148,18 +166,86 @@ export default class Index extends Component<IState> {
     });
   };
 
+  setCurrentTime = () => {
+    const { currentTime } = this.innerAudioContext;
+    console.log("currentTime", currentTime);
+    this.setState(
+      {
+        currentTime: currentTime * 1000,
+      },
+      () => {
+        const { top, lines } = this.cumputeTopAndLine();
+        this.setState({
+          lines,
+          top,
+        });
+      }
+    );
+  };
+
+  cumputeTopAndLine = (): any => {
+    const { songLyricLines, currentTime } = this.state;
+    let top = 0;
+    const lines = songLyricLines.map((x, index) => ({
+      ...x,
+      index,
+      active: false,
+    }));
+    lines.forEach((x) => (x.active = false));
+    const lineItemIndex = lines.findIndex((item) => {
+      return item.time >= currentTime;
+    });
+    if (lineItemIndex > 0) {
+      const lineItem = lines[lineItemIndex - 1];
+      lineItem.active = true;
+      top = lineItem.index * 40;
+      console.log(lineItem);
+    }
+
+    return { top, lines };
+  };
+
+  musicPlayBodyClick = (): void => {
+    console.log("musicPlayBodyClick");
+    this.setState({
+      cdAndLyricFlag: !this.state.cdAndLyricFlag,
+    });
+  };
+
   render() {
     return (
-      <View className="page-wrap">
+      <View className="music-play-page-wrap">
         <View className="music-play__header">
           <MusicPlayHeader songDetail={this.state.songDetail}></MusicPlayHeader>
         </View>
-        <View className="music-play__content">
-          {/* <MusicPlayCD
-            songDetail={this.state.songDetail}
-            isPlay={this.state.isPlay}
-          ></MusicPlayCD> */}
-          <MusicPlayLyric songLyric={this.state.songLyric}></MusicPlayLyric>
+        <View
+          className="music-play__content"
+          onClick={() => this.musicPlayBodyClick()}
+        >
+          <View
+            className={
+              this.state.cdAndLyricFlag
+                ? "music-play__content__inner music-play__content__inner--cd"
+                : "music-play__content__inner"
+            }
+          >
+            <MusicPlayCD
+              songDetail={this.state.songDetail}
+              isPlay={this.state.isPlay}
+            ></MusicPlayCD>
+          </View>
+          <View
+            className={
+              this.state.cdAndLyricFlag
+                ? "music-play__content__inner"
+                : "music-play__content__inner music-play__content__inner--lyr"
+            }
+          >
+            <MusicPlayLyric
+              top={this.state.top}
+              lines={this.state.lines}
+            ></MusicPlayLyric>
+          </View>
         </View>
         <View className="music-play__bottom">
           <MusicPlayBottom

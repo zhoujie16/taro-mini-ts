@@ -1,9 +1,27 @@
 .music-play-lyric {
   position: relative;
   height: 100%;
-  overflow: scroll;
   .music-play-lyric__inner {
-    position: relative;
     height: 100%;
+    position: relative;
+    .music-play-lyric__inner-lyric-scroll {
+      height: 100%;
+      position: relative;
+      .music-play-lyric__inner-lyric {
+        font-size: 28px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        line-height: 80px;
+        padding: 400px 0;
+        .music-play-lyric__line {
+          color: rgb(130, 128, 124);
+          transition: color ease 1s;
+          &.music-play-lyric__line--active {
+            color: #ffffff;
+          }
+        }
+      }
+    }
   }
 }

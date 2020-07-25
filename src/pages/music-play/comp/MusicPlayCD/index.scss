@@ -25,38 +25,66 @@
       z-index: 10;
       transition: transform ease 0.4s;
       &.music-play__needle-play {
-        transform: rotate(3deg);
+        transform: rotate(-2deg);
       }
       &.music-play__needle-pause {
-        transform: rotate(-26deg);
+        transform: rotate(-35deg);
       }
     }
-    .music-play__cd {
+    .music-play__cd-swiper-wrap {
       position: relative;
-      width: 630px;
+      width: 750px;
       height: 630px;
-      border-radius: 630px;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      .music-play__cd-cover-img {
-        position: relative;
-        width: 410px;
-        border-radius: 410px;
-        overflow: hidden;
-      }
-      .music-play__cd-bg {
+      .music-play__cd-border {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url("./../../imgs/UTNkD0.png");
-        background-size: 100%;
-        background-repeat: no-repeat;
-        z-index: 1;
+        width: 600px;
+        height: 600px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 600px;
+        border: solid 30px rgba(255, 255, 255, 0.15);
+      }
+      .music-play__cd-swiper {
+        position: relative;
+        width: 750px;
+        height: 630px;
+        .music-play__cd-swiper-item {
+          width: 750px;
+          height: 630px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .music-play__cd {
+            position: relative;
+            width: 570px;
+            height: 570px;
+            border-radius: 570px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .music-play__cd-cover-img {
+              position: relative;
+              width: 410px;
+              border-radius: 410px;
+              overflow: hidden;
+            }
+            .music-play__cd-bg {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-image: url("./../../imgs/UTNkD0.png");
+              background-size: 100%;
+              background-repeat: no-repeat;
+              z-index: 1;
+            }
+          }
+        }
       }
     }
   }

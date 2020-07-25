@@ -8,6 +8,7 @@ import MusicListCell from "@/pages/rank-list-detail/comp/MusicListCell";
 
 interface IProps {
   tracks: any[];
+  cellClickFn: any;
 }
 
 export default class Index extends Component<IProps> {
@@ -36,6 +37,7 @@ export default class Index extends Component<IProps> {
               key={index}
               musicInfo={item}
               curIndex={index + 1}
+              cellClickFn={this.props.cellClickFn}
             ></MusicListCell>
           ))}
         </View>

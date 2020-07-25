@@ -2,35 +2,29 @@ import React, { Component } from "react";
 import { View, Text } from "@tarojs/components";
 import "./index.scss";
 import Taro from "@tarojs/taro";
-import { Ajax_song_detail, Ajax_lyric, Ajax_song_url } from "@/api";
+import { Ajax_lyric, Ajax_song_url, Ajax_playlist_detail } from "@/api";
 import MusicPlayBottom from "./comp/MusicPlayBottom";
 import MusicPlayCD from "./comp/MusicPlayCD";
 import MusicPlayLyric from "./comp/MusicPlayLyric";
 import MusicPlayHeader from "./comp/MusicPlayHeader";
 import LyricContext from "./comp/MusicPlayLyric/lyric-parser";
 
-interface IState {
-  isPlay: boolean; // 是否正在播放中
-  songDetail: any; // 歌曲详情
-  songLyric: string; // 歌词
-  songUrl: string; // 歌曲链接
-}
+interface IState {}
 
 export default class Index extends Component<IState> {
   routerParams: any = {};
   innerAudioContext: any; // 音乐播放上下文
-  lyricContext: any;
-  musicUrl: string;
+  songLyricLines: any[] = []; // 歌词格式化的数组
   state: any = {
-    isPlay: false,
-    songDetail: {},
-    songLyric: "",
-    songLyricLines: [], // 歌词格式化的数组
-    songUrl: "",
+    playStatus: "stop", // 播放状态 播放 play  暂停 stop  等待 wait
     currentTime: 0,
-    lines: [],
-    top: 0,
+    lines: [], // 歌词面板用的歌词
+    top: 0, // 歌词面板滚动距离
     cdAndLyricFlag: true,
+    /**  */
+    songTracks: [], // 播放列表
+    currentIndex: 0, //当前播放序号
+    currentSong: {}, // 当前播放
   };
 
   constructor(props) {
@@ -45,6 +39,7 @@ export default class Index extends Component<IState> {
     console.log("componentDidMount");
     this.routerParams = Taro.getCurrentInstance().router.params;
     console.log("routerParams", this.routerParams);
+    this.createInnerAudioContext();
     this.initPage();
   }
 
@@ -61,63 +56,83 @@ export default class Index extends Component<IState> {
   }
 
   initPage = async (): Promise<void> => {
-    const [err_song_detail, res_song_detail] = await Ajax_song_detail({
-      ids: this.routerParams.id,
-    });
-    if (err_song_detail) return;
-    console.log("res_song_detail", res_song_detail);
-
-    const songDetail = res_song_detail.songs[0];
-
-    const [err_lyric, res_lyric] = await Ajax_lyric({
+    const [err_songTracks, res_songTracks] = await Ajax_playlist_detail({
       id: this.routerParams.id,
     });
-    if (err_lyric) return;
-    console.log("res_lyric", res_lyric);
-
-    const songLyric = res_lyric.lrc.lyric;
-
-    const [err_song_url, res_song_url] = await Ajax_song_url({
-      id: this.routerParams.id,
-    });
-    if (err_song_url) return;
-    console.log("res_song_url", res_song_url);
-    const songUrl = res_song_url.data[0].url;
-
-    this.lyricContext = new LyricContext(songLyric, () => {});
-    console.log("this.lyricContext", this.lyricContext);
+    if (err_songTracks) return;
+    // res_songTracks.playlist.trackIds
+    const songTracks = res_songTracks.playlist.tracks;
+    console.log("songTracks", songTracks);
     this.setState(
       {
-        songDetail,
-        songLyric,
-        songUrl,
-        songLyricLines: this.lyricContext.lines,
+        songTracks,
       },
       () => {
-        console.log("music play state", this.state);
-        this.createInnerAudioContext();
-        const { top, lines } = this.cumputeTopAndLine();
-        this.setState({
-          lines,
-          top,
-        });
+        this.setCurrentSong(0);
       }
     );
   };
 
-  // 播放按钮点击事件
-  playBtnClick = (): void => {
-    const isPlay = this.state.isPlay;
-    if (isPlay) {
-      console.log("暂停");
-      this.pauseMusic();
-    } else {
-      console.log("播放");
+  // 设置当前播放的歌曲
+  setCurrentSong = async (
+    currentIndex: number,
+    isAutoPlay?: boolean
+  ): Promise<any> => {
+    const songTracks = this.state.songTracks;
+    const currentSong = songTracks[currentIndex];
+    this.setState({
+      currentIndex: currentIndex,
+      currentSong: currentSong,
+    });
+    // 下载
+    const [err_lyric, res_lyric] = await Ajax_lyric({
+      id: currentSong.id,
+    });
+    if (err_lyric) return;
+    console.log("res_lyric", res_lyric);
+    const songLyric = res_lyric.lrc.lyric;
+
+    const [err_song_url, res_song_url] = await Ajax_song_url({
+      id: currentSong.id,
+    });
+    if (err_song_url) return;
+    console.log("res_song_url", res_song_url);
+    const songUrl = res_song_url.data[0].url;
+    this.innerAudioContext.src = songUrl;
+
+    const lyricContext = new LyricContext(songLyric, () => {});
+    this.songLyricLines = lyricContext.lines;
+    this.cumputeTopAndLine(this.songLyricLines, 0);
+
+    if (isAutoPlay) {
       this.playMusic();
     }
-    this.setState({
-      isPlay: !isPlay,
-    });
+  };
+
+  // 播放按钮点击事件
+  playBtnClick = (): void => {
+    const { playStatus } = this.state;
+    if (playStatus === "play") {
+      this.pauseMusic();
+    } else if (playStatus === "stop") {
+      this.playMusic();
+    }
+  };
+  // 上一首
+  preBtnClick = (): void => {
+    console.log("上一首");
+    if (this.state.currentIndex === 0) return;
+    // 当前播放的停止
+    this.innerAudioContext.stop();
+    this.setCurrentSong(this.state.currentIndex - 1, true);
+  };
+  // 下一首
+  nextBtnClick = (): void => {
+    console.log("下一首");
+    if (this.state.currentIndex === this.state.songTracks.length - 1) return;
+    // 当前播放的停止
+    this.innerAudioContext.stop();
+    this.setCurrentSong(this.state.currentIndex + 1, true);
   };
 
   playMusic = (): void => {
@@ -130,61 +145,71 @@ export default class Index extends Component<IState> {
 
   createInnerAudioContext = (): void => {
     this.innerAudioContext = Taro.createInnerAudioContext();
-    this.innerAudioContext.src = this.state.songUrl;
     this.innerAudioContext.onCanplay(() => {
       console.log("onCanplay");
     });
     this.innerAudioContext.onPlay(() => {
       console.log("onPlay");
-      this.setCurrentTime();
+      this.setState({
+        playStatus: "play",
+      });
     });
     this.innerAudioContext.onPause(() => {
       console.log("onPause");
-      this.setCurrentTime();
+      this.setState({
+        playStatus: "stop",
+      });
     });
     this.innerAudioContext.onStop(() => {
       console.log("onStop");
+      this.setState({
+        playStatus: "stop",
+      });
     });
     this.innerAudioContext.onEnded(() => {
       console.log("onEnded");
+      this.setState({
+        playStatus: "stop",
+      });
     });
     this.innerAudioContext.onTimeUpdate(() => {
       console.log("onTimeUpdate");
       this.setCurrentTime();
+      this.setState({
+        playStatus: "play",
+      });
     });
     this.innerAudioContext.onWaiting(() => {
       console.log("onWaiting");
+      this.setState({
+        playStatus: "wait",
+      });
     });
     this.innerAudioContext.onSeeking(() => {
       console.log("onSeeking");
+      this.setState({
+        playStatus: "wait",
+      });
     });
     this.innerAudioContext.onSeeked(() => {
       console.log("onSeeked");
     });
     this.innerAudioContext.onError((res) => {
       console.log("onError", res);
+      this.setState({
+        playStatus: "stop",
+      });
     });
   };
 
   setCurrentTime = () => {
     const { currentTime } = this.innerAudioContext;
-    console.log("currentTime", currentTime);
-    this.setState(
-      {
-        currentTime: currentTime * 1000,
-      },
-      () => {
-        const { top, lines } = this.cumputeTopAndLine();
-        this.setState({
-          lines,
-          top,
-        });
-      }
-    );
+    console.log("currentTime", currentTime * 1000);
+    this.cumputeTopAndLine(this.songLyricLines, currentTime * 1000);
   };
 
-  cumputeTopAndLine = (): any => {
-    const { songLyricLines, currentTime } = this.state;
+  // 计算歌词面板的状态数据
+  cumputeTopAndLine = (songLyricLines: any[], currentTime: number): any => {
     let top = 0;
     const lines = songLyricLines.map((x, index) => ({
       ...x,
@@ -196,13 +221,15 @@ export default class Index extends Component<IState> {
       return item.time >= currentTime;
     });
     if (lineItemIndex > 0) {
-      const lineItem = lines[lineItemIndex-1];
+      const lineItem = lines[lineItemIndex - 1];
       lineItem.active = true;
       top = lineItem.index * 40;
       console.log(lineItem);
     }
-
-    return { top, lines };
+    this.setState({
+      lines,
+      top,
+    });
   };
 
   musicPlayBodyClick = (): void => {
@@ -212,16 +239,23 @@ export default class Index extends Component<IState> {
     });
   };
 
+  onChange = (e) => {
+    console.log("onChange", e.detail);
+    this.setCurrentSong(e.detail.current, true);
+  };
   render() {
     return (
       <View className="music-play-page-wrap">
         <View className="music-play__header">
-          <MusicPlayHeader songDetail={this.state.songDetail}></MusicPlayHeader>
+          <MusicPlayHeader
+            currentSong={this.state.currentSong}
+          ></MusicPlayHeader>
         </View>
         <View
           className="music-play__content"
           onClick={() => this.musicPlayBodyClick()}
         >
+          {/* 音乐CD */}
           <View
             className={
               this.state.cdAndLyricFlag
@@ -230,10 +264,13 @@ export default class Index extends Component<IState> {
             }
           >
             <MusicPlayCD
-              songDetail={this.state.songDetail}
-              isPlay={this.state.isPlay}
+              songTracks={this.state.songTracks}
+              currentIndex={this.state.currentIndex}
+              playStatus={this.state.playStatus}
+              onChange={this.onChange}
             ></MusicPlayCD>
           </View>
+          {/* 歌词 */}
           <View
             className={
               this.state.cdAndLyricFlag
@@ -249,8 +286,10 @@ export default class Index extends Component<IState> {
         </View>
         <View className="music-play__bottom">
           <MusicPlayBottom
-            isPlay={this.state.isPlay}
+            playStatus={this.state.playStatus}
             playBtnClicnFn={this.playBtnClick}
+            preBtnClickFn={this.preBtnClick}
+            nextBtnClickFn={this.nextBtnClick}
           ></MusicPlayBottom>
         </View>
       </View>

@@ -55,11 +55,22 @@ export default class Index extends Component<IState> {
       tracks: playlist.tracks,
     });
   };
+
+  goMusicPlayPage = (): void => {
+    console.log("播放按钮点击", this.routerParams.id);
+    // 去播放器页面
+    Taro.navigateTo({
+      url: `/pages/music-play/index?id=${this.routerParams.id}`,
+    });
+  };
   render() {
     return (
       <View className="page-wrap">
         <HeaderPanel playlist={this.state.playlist}></HeaderPanel>
-        <MusicList tracks={this.state.tracks}></MusicList>
+        <MusicList
+          tracks={this.state.tracks}
+          cellClickFn={this.goMusicPlayPage}
+        ></MusicList>
       </View>
     );
   }

@@ -46,7 +46,7 @@ export default class Index extends Component<IProps, IState> {
             onScroll={this.onScroll}
           >
             <View className="music-play-lyric__inner-lyric">
-              {this.props.lines.map((item) => {
+              {this.props.lines.map((item, index) => {
                 return (
                   <View
                     className={
@@ -54,7 +54,7 @@ export default class Index extends Component<IProps, IState> {
                         ? "music-play-lyric__line music-play-lyric__line--active"
                         : "music-play-lyric__line"
                     }
-                    key={item.time}
+                    key={index}
                   >
                     {item.txt}
                   </View>

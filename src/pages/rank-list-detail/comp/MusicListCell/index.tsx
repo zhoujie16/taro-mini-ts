@@ -7,6 +7,7 @@ import Utils from "@/common/utils/index.ts";
 interface IProps {
   musicInfo: any;
   curIndex: number;
+  cellClickFn: any;
 }
 
 export default class Index extends Component<IProps> {
@@ -30,15 +31,6 @@ export default class Index extends Component<IProps> {
     console.log("MusicList componentWillUnmount");
   }
 
-  // 播放按钮点击
-  cellPlayBtnClick = (): void => {
-    console.log("播放按钮点击", this.props.musicInfo);
-    // 去播放器页面
-    Taro.navigateTo({
-      url: `/pages/music-play/index?id=${this.props.musicInfo.id}`,
-    });
-  };
-
   filterSubTitle = (): string => {
     const musicInfo = this.props.musicInfo;
     const ar = musicInfo.ar.map((x) => x.name).join(",");
@@ -61,7 +53,7 @@ export default class Index extends Component<IProps> {
           </View>
           <View
             className="music-list-cell__play"
-            onClick={() => this.cellPlayBtnClick()}
+            onClick={() => this.props.cellClickFn()}
           ></View>
         </View>
       </View>

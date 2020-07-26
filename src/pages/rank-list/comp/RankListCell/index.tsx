@@ -12,25 +12,12 @@ export default class Index extends Component<IProps> {
     super(props);
   }
 
-  public get coverImgUrl(): string {
-    return this.props.detailInfo.coverImgUrl;
-  }
-
-  public get tracks(): any[] {
-    return this.props.detailInfo.tracks;
-  }
-
-  public get id(): string {
-    return this.props.detailInfo.id;
-  }
-
   componentWillMount() {
     console.log("RankListCell componentWillMount");
   }
 
   componentDidMount() {
     console.log("RankListCell componentDidMount");
-    console.info(this.coverImgUrl);
   }
 
   componentWillUnmount() {
@@ -38,20 +25,18 @@ export default class Index extends Component<IProps> {
   }
 
   render() {
+    const { coverImgUrl, tracks, id, updateFrequency } = this.props.detailInfo;
     return (
-      <View
-        onClick={() => this.props.onClick(this.id)}
-        className="rank-list-cell"
-      >
+      <View onClick={() => this.props.onClick(id)} className="rank-list-cell">
         <View className="rank-list-cell__inner">
           <View className="rank-list-cell__cover">
-            <Image
-              className="rank-list-cell__cover-img"
-              src={this.coverImgUrl}
-            />
+            <Image className="rank-list-cell__cover-img" src={coverImgUrl} />
+            <View className="rank-list-cell__update-time">
+              {updateFrequency}
+            </View>
           </View>
           <View className="rank-list-cell__info">
-            {this.tracks.map((item, index) => (
+            {tracks.map((item, index) => (
               <Text key={index} className="rank-list-cell__text">{`${
                 index + 1
               }.${item.first} - ${item.second}`}</Text>

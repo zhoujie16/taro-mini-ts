@@ -22,22 +22,36 @@ export default class Index extends Component<IProps> {
   componentDidHide() {}
 
   render() {
+    const { coverImgUrl, name, description, creator } = this.props.playlist;
+
     return (
       <View className="header-panel">
+        <View className="header-panel-bg">
+          <Image
+            className="header-panel-bg-img"
+            src={creator.backgroundUrl}
+            mode="aspectFill"
+          ></Image>
+        </View>
         <View className="header-panel__inner">
           <View className="header-panel__cover">
             <Image
               className="header-panel__cover-img"
-              src={this.props.playlist.coverImgUrl}
+              src={coverImgUrl}
             ></Image>
           </View>
           <View className="header-panel__info">
-            <View className="header-panel__info-title">
-              {this.props.playlist.name}
+            <View className="header-panel__info-title">{name}</View>
+            <View className="header-panel__info-creator">
+              <Image
+                className="header-panel__info-creator-avatar"
+                src={creator.avatarUrl}
+              ></Image>
+              <View className="header-panel__info-creator-nickname">
+                {creator.nickname}
+              </View>
             </View>
-            <View className="header-panel__info-sub-title">
-              {this.props.playlist.description}
-            </View>
+            <View className="header-panel__info-description">{description}</View>
           </View>
         </View>
       </View>

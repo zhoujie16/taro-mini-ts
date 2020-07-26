@@ -188,9 +188,14 @@ export default class Index extends Component<IState> {
     });
     this.innerAudioContext.onEnded(() => {
       console.log("onEnded");
-      this.setState({
-        playStatus: "stop",
-      });
+      this.setState(
+        {
+          playStatus: "stop",
+        },
+        () => {
+          this.nextBtnClick();
+        }
+      );
     });
     this.innerAudioContext.onTimeUpdate(() => {
       console.log("onTimeUpdate");

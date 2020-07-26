@@ -1,6 +1,19 @@
 .header-panel {
+  position: relative;
   padding: 35px;
-  background-color: rgb(142, 69, 60);
+  color: #ffffff;
+  .header-panel-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    filter: brightness(0.8);
+    .header-panel-bg-img {
+      width: 750px;
+    }
+  }
   .header-panel__inner {
     display: flex;
     .header-panel__cover {
@@ -16,14 +29,43 @@
       color: #ffffff;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      padding: 40px;
+      padding: 10px 40px;
       padding-right: 0;
       .header-panel__info-title {
+        height: 50px;
+        line-height: 50px;
         font-size: 36px;
+        margin-bottom: 25px;
       }
-      .header-panel__info-sub-title {
+      .header-panel__info-creator {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        font-size: 28px;
+        margin-bottom: 25px;
+        .header-panel__info-creator-avatar {
+          width: 55px;
+          height: 55px;
+          border-radius: 55px;
+          overflow: hidden;
+          .header-panel__info-creator-avatar-img {
+            width: 55px;
+            height: 55px;
+          }
+        }
+        .header-panel__info-creator-nickname {
+          padding-left: 12px;
+        }
+      }
+      .header-panel__info-description {
+        height: 110px;
+        width: 350px;
         font-size: 24px;
+        overflow: hidden;
+        display: -webkit-box;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 3; /*要显示的行数*/
+        -webkit-box-orient: vertical;
       }
     }
   }

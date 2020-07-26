@@ -1,24 +1,40 @@
 .rank-list-cell {
-  padding: 0 30px 30px 30px;
+  padding-bottom: 30px;
   .rank-list-cell__inner {
     display: flex;
+    height: 215px;
     .rank-list-cell__cover {
+      position: relative;
       flex: 0 0 215px;
       .rank-list-cell__cover-img {
         width: 215px;
         height: 215px;
         background-color: #dddddd;
         border-radius: 10px;
+        filter: brightness(0.95);
+      }
+      .rank-list-cell__update-time {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 6px;
+        height: 36px;
+        line-height: 36px;
+        padding: 0 12px;
+        font-size: 20px;
+        color: #ffffff;
+        overflow: hidden;
       }
     }
     .rank-list-cell__info {
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
-      justify-content: space-around;
-      padding-left: 30px;
+      justify-content: space-between;
+      padding: 20px 30px;
       .rank-list-cell__text {
         font-size: 28px;
+        color: #888888;
       }
     }
   }

@@ -1,0 +1,44 @@
+.rank-list-card {
+  .rank-list-card__inner {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    .rank-list-card__cover {
+      position: relative;
+      flex: 0 0 215px;
+      height: 215px;
+      margin-bottom: 10px;
+      .rank-list-card__cover-img {
+        width: 215px;
+        height: 215px;
+        background-color: #dddddd;
+        border-radius: 10px;
+        filter: brightness(0.95);
+      }
+      .rank-list-card__update-time {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 6px;
+        height: 36px;
+        line-height: 36px;
+        padding: 0 12px;
+        font-size: 20px;
+        color: #ffffff;
+        overflow: hidden;
+      }
+    }
+    .rank-list-card__text {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 40px;
+      font-size: 24px;
+      width: 215px;
+      color: #888888;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

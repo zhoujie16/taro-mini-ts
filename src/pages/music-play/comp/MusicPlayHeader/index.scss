@@ -18,10 +18,20 @@
     justify-content: center;
     align-items: center;
     .music-paly-header__al-name {
+      width: 500px;
+      text-align: center;
       font-size: 30px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .music-paly-header__ar-name {
+      width: 500px;
+      text-align: center;
       font-size: 24px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
   .music-paly-header__right {

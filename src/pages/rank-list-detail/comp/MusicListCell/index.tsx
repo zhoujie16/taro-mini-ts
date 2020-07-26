@@ -53,7 +53,7 @@ export default class Index extends Component<IProps> {
           </View>
           <View
             className="music-list-cell__play"
-            onClick={() => this.props.cellClickFn()}
+            onClick={() => this.props.cellClickFn(this.props.curIndex - 1)}
           ></View>
         </View>
       </View>

@@ -1,8 +1,12 @@
 import React, { Component } from "react";
-import { View, Text } from "@tarojs/components";
+import { View } from "@tarojs/components";
 import "./index.scss";
 import Taro from "@tarojs/taro";
-import { Ajax_lyric, Ajax_song_url, Ajax_playlist_detail } from "@/api";
+import {
+  Ajax_lyric,
+  Ajax_song_url,
+  Ajax_playlist_detail,
+} from "@/api/index.ts";
 import MusicPlayBottom from "./comp/MusicPlayBottom";
 import MusicPlayCD from "./comp/MusicPlayCD";
 import MusicPlayLyric from "./comp/MusicPlayLyric";
@@ -45,6 +49,8 @@ export default class Index extends Component<IState> {
 
   componentWillUnmount() {
     console.log("componentWillUnmount");
+    // 销毁音乐播放组件
+    this.innerAudioContext.destroy();
   }
 
   componentDidShow() {
@@ -68,7 +74,7 @@ export default class Index extends Component<IState> {
         songTracks,
       },
       () => {
-        this.setCurrentSong(0);
+        this.setCurrentSong(Number(this.routerParams.num));
       }
     );
   };
@@ -84,7 +90,7 @@ export default class Index extends Component<IState> {
       currentIndex: currentIndex,
       currentSong: currentSong,
     });
-    // 下载
+    // 下载setCurrentSong
     const [err_lyric, res_lyric] = await Ajax_lyric({
       id: currentSong.id,
     });

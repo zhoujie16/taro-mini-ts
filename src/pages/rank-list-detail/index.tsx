@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { View, Text } from "@tarojs/components";
+import { View } from "@tarojs/components";
 import "./index.scss";
 import Taro from "@tarojs/taro";
-import Utils from "@/common/utils/index.ts";
 import HeaderPanel from "@/pages/rank-list-detail/comp/HeaderPanel";
 import MusicList from "@/pages/rank-list-detail/comp/MusicList";
 import { Ajax_playlist_detail } from "@/api/index.ts";
@@ -56,11 +55,11 @@ export default class Index extends Component<IState> {
     });
   };
 
-  goMusicPlayPage = (): void => {
-    console.log("播放按钮点击", this.routerParams.id);
+  goMusicPlayPage = (curIndex): void => {
+    console.log("播放按钮点击", this.routerParams.id, curIndex);
     // 去播放器页面
     Taro.navigateTo({
-      url: `/pages/music-play/index?id=${this.routerParams.id}`,
+      url: `/pages/music-play/index?id=${this.routerParams.id}&num=${curIndex}`,
     });
   };
   render() {

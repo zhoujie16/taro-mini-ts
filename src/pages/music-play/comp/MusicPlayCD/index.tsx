@@ -61,10 +61,22 @@ export default class Index extends Component<IProps, IState> {
             >
               {arr.map((picUrl, index) => {
                 const currentIndex = this.props.currentIndex;
-                const isShowPicUrl =
+                // 始终只显示3个 且 只有当前播放的CD有旋转动画
+                const isShowCD =
                   currentIndex === index ||
                   currentIndex === index - 1 ||
                   currentIndex === index + 1;
+                const isCurrentCD = currentIndex === index;
+                if (!isShowCD) {
+                  return (
+                    <SwiperItem
+                      className="music-play__cd-swiper-item"
+                      key={index}
+                    >
+                      <View className={`music-play__cd`}></View>
+                    </SwiperItem>
+                  );
+                }
                 return (
                   <SwiperItem
                     className="music-play__cd-swiper-item"
@@ -74,14 +86,16 @@ export default class Index extends Component<IProps, IState> {
                       className={`music-play__cd ${
                         this.props.playStatus === "stop"
                           ? "music-play__cd-play-action music-play__cd-play-action-pause"
-                          : "music-play__cd-play-action"
+                          : isCurrentCD
+                          ? "music-play__cd-play-action"
+                          : ""
                       }`}
                     >
                       <View className="music-play__cd-bg"></View>
                       <Image
                         className="music-play__cd-cover-img"
                         mode="widthFix"
-                        src={isShowPicUrl ? picUrl : ""}
+                        src={picUrl}
                       ></Image>
                     </View>
                   </SwiperItem>

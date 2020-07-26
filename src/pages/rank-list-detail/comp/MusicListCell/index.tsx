@@ -40,7 +40,10 @@ export default class Index extends Component<IProps> {
 
   render() {
     return (
-      <View className="music-list-cell">
+      <View
+        className="music-list-cell"
+        onClick={() => this.props.cellClickFn(this.props.curIndex - 1)}
+      >
         <View className="music-list-cell__inner">
           <View className="music-list-cell__num">{this.props.curIndex}</View>
           <View className="music-list-cell__info">
@@ -51,10 +54,7 @@ export default class Index extends Component<IProps> {
               {this.filterSubTitle()}
             </View>
           </View>
-          <View
-            className="music-list-cell__play"
-            onClick={() => this.props.cellClickFn(this.props.curIndex - 1)}
-          ></View>
+          <View className="music-list-cell__play"></View>
         </View>
       </View>
     );

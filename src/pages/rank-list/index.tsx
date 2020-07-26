@@ -3,7 +3,7 @@ import { View, Text } from "@tarojs/components";
 import "./index.scss";
 import Taro from "@tarojs/taro";
 import Utils from "@/common/utils/index.ts";
-import { AtNavBar } from "taro-ui";
+import { AtActivityIndicator } from "taro-ui";
 import RankListCell from "./comp/RankListCell";
 import { Ajax_toplist_detail } from "@/api/index.ts";
 
@@ -54,9 +54,19 @@ export default class Index extends Component<IState> {
     });
   };
   render() {
+    if (this.state.rankList.length === 0) {
+      return (
+        <View className="rank-list-page-wrap">
+          <AtActivityIndicator
+            mode="center"
+            content="加载中..."
+            size={32}
+          ></AtActivityIndicator>
+        </View>
+      );
+    }
     return (
-      <View className="page-wrap">
-        <AtNavBar color="#000" title="排行榜" />
+      <View className="rank-list-page-wrap">
         <View className="rank-list-wrap">
           {this.state.rankList.map((item, index) => {
             return (

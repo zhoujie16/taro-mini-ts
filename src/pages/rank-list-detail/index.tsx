@@ -5,6 +5,7 @@ import Taro from "@tarojs/taro";
 import HeaderPanel from "@/pages/rank-list-detail/comp/HeaderPanel";
 import MusicList from "@/pages/rank-list-detail/comp/MusicList";
 import { Ajax_playlist_detail } from "@/api/index.ts";
+import { AtActivityIndicator } from "taro-ui";
 
 interface IState {
   playlist: any; // 歌单简介
@@ -63,8 +64,19 @@ export default class Index extends Component<IState> {
     });
   };
   render() {
+    if (this.state.tracks.length === 0) {
+      return (
+        <View className="rank-list-page-wrap">
+          <AtActivityIndicator
+            mode="center"
+            content="加载中..."
+            size={32}
+          ></AtActivityIndicator>
+        </View>
+      );
+    }
     return (
-      <View className="page-wrap">
+      <View className="rank-list-detail-page-wrap">
         <HeaderPanel playlist={this.state.playlist}></HeaderPanel>
         <MusicList
           tracks={this.state.tracks}

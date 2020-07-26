@@ -12,6 +12,7 @@ import MusicPlayCD from "./comp/MusicPlayCD";
 import MusicPlayLyric from "./comp/MusicPlayLyric";
 import MusicPlayHeader from "./comp/MusicPlayHeader";
 import LyricContext from "./comp/MusicPlayLyric/lyric-parser";
+import { AtActivityIndicator } from "taro-ui";
 
 interface IState {}
 
@@ -19,6 +20,7 @@ export default class Index extends Component<IState> {
   routerParams: any = {};
   innerAudioContext: any; // 音乐播放上下文
   songLyricLines: any[] = []; // 歌词格式化的数组
+  timer_play: any; // 防抖定时器
   state: any = {
     playStatus: "stop", // 播放状态 播放 play  暂停 stop  等待 wait
     currentTime: 0,
@@ -50,7 +52,7 @@ export default class Index extends Component<IState> {
   componentWillUnmount() {
     console.log("componentWillUnmount");
     // 销毁音乐播放组件
-    this.innerAudioContext.destroy();
+    // this.innerAudioContext.destroy();
   }
 
   componentDidShow() {
@@ -74,7 +76,7 @@ export default class Index extends Component<IState> {
         songTracks,
       },
       () => {
-        this.setCurrentSong(Number(this.routerParams.num));
+        this.setCurrentSong(Number(this.routerParams.num), true);
       }
     );
   };
@@ -109,7 +111,6 @@ export default class Index extends Component<IState> {
     const lyricContext = new LyricContext(songLyric, () => {});
     this.songLyricLines = lyricContext.lines;
     this.cumputeTopAndLine(this.songLyricLines, 0);
-
     if (isAutoPlay) {
       this.playMusic();
     }
@@ -129,7 +130,10 @@ export default class Index extends Component<IState> {
     console.log("上一首");
     if (this.state.currentIndex === 0) return;
     // 当前播放的停止
-    this.innerAudioContext.stop();
+    this.pauseMusic();
+    this.setState({
+      playStatus: "stop",
+    });
     this.setCurrentSong(this.state.currentIndex - 1, true);
   };
   // 下一首
@@ -137,12 +141,22 @@ export default class Index extends Component<IState> {
     console.log("下一首");
     if (this.state.currentIndex === this.state.songTracks.length - 1) return;
     // 当前播放的停止
-    this.innerAudioContext.stop();
+    this.pauseMusic();
+    this.setState({
+      playStatus: "stop",
+    });
     this.setCurrentSong(this.state.currentIndex + 1, true);
   };
 
   playMusic = (): void => {
-    this.innerAudioContext.play();
+    // 防抖
+    if (this.timer_play) {
+      clearTimeout(this.timer_play);
+      this.timer_play = null;
+    }
+    this.timer_play = setTimeout(() => {
+      this.innerAudioContext.play();
+    }, 400);
   };
 
   pauseMusic = (): void => {
@@ -180,6 +194,10 @@ export default class Index extends Component<IState> {
     });
     this.innerAudioContext.onTimeUpdate(() => {
       console.log("onTimeUpdate");
+      const { currentTime } = this.innerAudioContext;
+      if (currentTime === 0) {
+        return;
+      }
       this.setCurrentTime();
       this.setState({
         playStatus: "play",
@@ -250,6 +268,17 @@ export default class Index extends Component<IState> {
     this.setCurrentSong(e.detail.current, true);
   };
   render() {
+    if (!this.state.currentSong.id) {
+      return (
+        <View className="music-play-page-wrap">
+          <AtActivityIndicator
+            mode="center"
+            content="加载中..."
+            size={32}
+          ></AtActivityIndicator>
+        </View>
+      );
+    }
     return (
       <View className="music-play-page-wrap">
         <View className="music-play__header">

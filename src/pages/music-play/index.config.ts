@@ -1,3 +1,4 @@
 export default {
-  navigationBarTitleText: '播放器'
-}
+  navigationBarTitleText: "播放",
+  navigationStyle: "custom",
+};

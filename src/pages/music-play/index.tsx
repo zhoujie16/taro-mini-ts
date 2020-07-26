@@ -52,7 +52,7 @@ export default class Index extends Component<IState> {
   componentWillUnmount() {
     console.log("componentWillUnmount");
     // 销毁音乐播放组件
-    // this.innerAudioContext.destroy();
+    this.innerAudioContext.destroy();
   }
 
   componentDidShow() {

@@ -2,6 +2,9 @@
   height: 120px;
   display: flex;
   align-items: center;
+  background-color: #ffffff;
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
   .music-list-nav__play {
     flex: 0 0 120px;
     height: 100%;

@@ -6,6 +6,7 @@
   overflow: hidden;
   background-image: url("./imgs/cm2_fm_bg@3x.jpg");
   background-size: 100% 100%;
+  padding-bottom: env(safe-area-inset-bottom);
   .music-play__header {
     flex: 0 0 130px;
   }
@@ -34,5 +35,8 @@
   }
   .music-play__bottom {
     flex: 0 0 220px;
+  }
+  .music-play__bottom-span {
+    flex: 0 0 60px;
   }
 }

@@ -31,7 +31,7 @@ export default class Index extends Component<IProps, IState> {
     console.log(" componentWillUnmount");
   }
   onScroll(e) {
-    console.log(e.detail);
+    // console.log(e.detail);
   }
 
   render() {

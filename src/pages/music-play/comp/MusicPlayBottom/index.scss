@@ -1,59 +1,82 @@
 .music-play-bottom {
-  height: 100%;
-  display: flex;
-  padding: 0 35px 0 35px;
-  .music-play-bottom__left {
-    height: 100%;
-    flex: 0 0 140px;
-    background-image: url("./../../imgs/c9p.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 88px;
-  }
-  .music-play-bottom__center {
-    height: 100%;
-    flex: 0 0 400px;
+  .music-play-slider {
+    height: 70px;
     display: flex;
-    .music-play-bottom__center--pre {
+    align-items: center;
+    padding: 0 10px;
+    .music-play-slider__text {
+      font-size: 20px;
+      color: #999999;
+      flex: 0 0 50px;
+      text-align: center;
+      &.music-play-slider__text--left {
+        transform: translateX(10px);
+      }
+      &.music-play-slider__text--right {
+        transform: translateX(-10px);
+      }
+    }
+    .music-play-slider__slider {
       flex: 1;
+    }
+  }
+  .music-play-bottom__inner {
+    height: 150px;
+    display: flex;
+    padding: 0 35px 0 35px;
+    .music-play-bottom__left {
       height: 100%;
-      background-image: url("./../../imgs/bce.png");
-      background-size: 56px;
+      flex: 0 0 140px;
+      background-image: url("./../../imgs/c9f.png");
       background-repeat: no-repeat;
       background-position: center;
+      background-size: 88px;
     }
     .music-play-bottom__center {
-      flex: 1;
       height: 100%;
-      background-size: 166px;
-      background-repeat: no-repeat;
-      background-position: center;
-      &.music-play-bottom__center--play {
-        background-image: url("./../../imgs/clj.png");
+      flex: 0 0 400px;
+      display: flex;
+      .music-play-bottom__center--pre {
+        flex: 1;
+        height: 100%;
+        background-image: url("./../../imgs/bce.png");
+        background-size: 56px;
+        background-repeat: no-repeat;
+        background-position: center;
       }
-      &.music-play-bottom__center--pause {
-        background-image: url("./../../imgs/clh.png");
+      .music-play-bottom__center {
+        flex: 1;
+        height: 100%;
+        background-size: 166px;
+        background-repeat: no-repeat;
+        background-position: center;
+        &.music-play-bottom__center--play {
+          background-image: url("./../../imgs/clj.png");
+        }
+        &.music-play-bottom__center--pause {
+          background-image: url("./../../imgs/clh.png");
+        }
+        &.music-play-bottom__center--wait {
+          background-size: 90px;
+          background-image: url("./../../imgs/cm4_xiaobing_wave_ani.png");
+        }
       }
-      &.music-play-bottom__center--wait{
-        background-size: 90px;
-        background-image: url('./../../imgs/cm4_xiaobing_wave_ani.png');
+      .music-play-bottom__center--next {
+        flex: 1;
+        height: 100%;
+        background-image: url("./../../imgs/bcb.png");
+        background-size: 56px;
+        background-repeat: no-repeat;
+        background-position: center;
       }
     }
-    .music-play-bottom__center--next {
-      flex: 1;
+    .music-play-bottom__right {
       height: 100%;
-      background-image: url("./../../imgs/bcb.png");
-      background-size: 56px;
+      flex: 0 0 140px;
+      background-image: url("./../../imgs/c_a.png");
       background-repeat: no-repeat;
       background-position: center;
+      background-size: 88px;
     }
-  }
-  .music-play-bottom__right {
-    height: 100%;
-    flex: 0 0 140px;
-    background-image: url("./../../imgs/c_a.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 88px;
   }
 }

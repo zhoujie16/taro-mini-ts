@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "@tarojs/taro";
 import { View } from "@tarojs/components";
 import "./index.scss";
 import Taro from "@tarojs/taro";
@@ -7,82 +8,52 @@ import MusicList from "@/pages/rank-list-detail/comp/MusicList";
 import { Ajax_playlist_detail } from "@/api/index.ts";
 import { AtActivityIndicator } from "taro-ui";
 
-interface IState {
-  playlist: any; // 歌单简介
-  tracks: any[]; // 歌单列表
-}
+const RankListDetail = () => {
+  const routerParams = useRouter().params;
+  console.log("routerParams", routerParams);
 
-export default class Index extends Component<IState> {
-  // 路由传来的参数
-  routerParams: any = {};
+  const [playlist, setPlaylist] = useState({});
+  const [tracks, setTracks] = useState([]);
 
-  state = {
-    playlist: {},
-    tracks: [],
-  };
+  useEffect(() => {
+    initPage();
+  }, [0]);
 
-  componentWillMount() {
-    console.log("rank-list-detail componentWillMount");
-  }
-
-  componentDidMount() {
-    console.log("rank-list-detail componentDidMount");
-    this.routerParams = Taro.getCurrentInstance().router.params;
-    console.log("routerParams", this.routerParams);
-    this.initPage();
-  }
-
-  componentWillUnmount() {
-    console.log("rank-list-detail componentWillUnmount");
-  }
-
-  componentDidShow() {
-    console.log("rank-list-detail componentDidShow");
-  }
-
-  componentDidHide() {
-    console.log("rank-list-detail componentDidHide");
-  }
-
-  initPage = async (): Promise<void> => {
+  async function initPage(): Promise<void> {
     const [err, res] = await Ajax_playlist_detail({
-      id: this.routerParams.id,
+      id: routerParams.id,
     });
     if (err) return;
     const { playlist } = res;
-    this.setState({
-      playlist,
-      tracks: playlist.tracks,
-    });
-  };
+    setPlaylist(playlist);
+    setTracks(playlist.tracks);
+  }
 
-  goMusicPlayPage = (curIndex): void => {
-    console.log("播放按钮点击", this.routerParams.id, curIndex);
+  function goMusicPlayPage(curIndex): void {
+    console.log("播放按钮点击", routerParams.id, curIndex);
     // 去播放器页面
     Taro.navigateTo({
-      url: `/pages/music-play/index?id=${this.routerParams.id}&num=${curIndex}`,
+      url: `/pages/music-play/index?id=${routerParams.id}&num=${curIndex}`,
     });
-  };
-  render() {
-    if (this.state.tracks.length === 0) {
-      return (
-        <View className="rank-list-page-wrap">
-          <AtActivityIndicator
-            mode="center"
-            content="加载中..."
-            size={32}
-          ></AtActivityIndicator>
-        </View>
-      );
-    }
+  }
+
+  if (tracks.length === 0) {
     return (
-      <View className="rank-list-detail-page-wrap">
-        <HeaderPanel playlist={this.state.playlist}></HeaderPanel>
-        <MusicList
-          tracks={this.state.tracks}
-          cellClickFn={this.goMusicPlayPage}
-        ></MusicList>
+      <View className="rank-list-page-wrap">
+        <AtActivityIndicator
+          mode="center"
+          content="加载中..."
+          size={32}
+        ></AtActivityIndicator>
       </View>
     );
   }
-}
+  return (
+    <View className="rank-list-detail-page-wrap">
+      <HeaderPanel playlist={playlist}></HeaderPanel>
+      <MusicList tracks={tracks} cellClickFn={goMusicPlayPage}></MusicList>
+    </View>
+  );
+};
+
+export default RankListDetail;

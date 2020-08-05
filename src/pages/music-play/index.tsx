@@ -17,23 +17,20 @@ import { AtActivityIndicator } from "taro-ui";
 
 const MusicPlay = () => {
   const routerParams: any = useRouter().params; // 路由传参
-  let innerAudioContext: any = useRef(null); // 音乐播放上下文
-  let songLyricLines: any = useRef([]); // 歌词格式化的数组
-  let timer_play: any = useRef(null); // 防抖定时器
-  let isSliding: any = useRef(false); // 是否在拖动进度条
+  const innerAudioContext: any = useRef(null); // 音乐播放上下文
+  const songLyricLines: any = useRef([]); // 歌词格式化的数组
+  const timer_play: any = useRef(null); // 防抖定时器
+  const isSliding: any = useRef(false); // 是否在拖动进度条
 
   const [playStatus, set_playStatus] = useState("stop"); // 播放状态 播放 play  暂停 stop  等待 wait
   const [currentTime, set_currentTime] = useState(0); // 当前进度 （进度条用）
-  const [durationTime, set_durationTime] = useState(0); // 总进度 (进度条用)
-  const durationTime_ref: any = useRef();
+  const durationTime_ref: any = useRef(); // 总进度 (进度条用)
   const [sliderValue, set_sliderValue] = useState(0); // 进度条值 (进度条用)
   const [lines, set_lines] = useState([]); // 歌词面板用的歌词 (歌词面板)
   const [top, set_top] = useState(0); // 歌词面板滚动距离 (歌词面板)
   const [cdAndLyricFlag, set_cdAndLyricFlag] = useState(true); // 唱片 歌词 切换标识
-  const [songTracks, set_songTracks] = useState([]); // 播放列表
   const songTracks_ref: any = useRef([]); // 播放列表
-  const [currentIndex, set_currentIndex] = useState(0); //当前播放序号
-  const currentIndex_ref: any = useRef(routerParams.num);
+  const currentIndex_ref: any = useRef(routerParams.num); //当前播放序号
 
   useEffect(() => {
     createInnerAudioContext();
@@ -52,7 +49,7 @@ const MusicPlay = () => {
     const _songTracks = res_songTracks.playlist.tracks;
     console.log("songTracks", _songTracks);
     // 设置播放列表
-    set_songTracks(_songTracks);
+    // set_songTracks(_songTracks);
     songTracks_ref.current = _songTracks;
     // 播放
     const num = Number(routerParams.num);
@@ -68,7 +65,6 @@ const MusicPlay = () => {
       console.log("onCanplay");
       // 总时间
       const { duration } = innerAudioContext.current;
-      set_durationTime(duration);
       durationTime_ref.current = duration;
     });
 
@@ -135,7 +131,6 @@ const MusicPlay = () => {
     isAutoPlay?: boolean // 是否立即播放
   ): Promise<void> {
     const currentSong = songTracks_ref.current[currentIndex];
-    set_currentIndex(currentIndex);
     currentIndex_ref.current = currentIndex;
 
     // 获取 歌曲 歌词
@@ -296,8 +291,8 @@ const MusicPlay = () => {
           }
         >
           <MusicPlayCD
-            songTracks={songTracks}
-            currentIndex={currentIndex}
+            songTracks={songTracks_ref.current}
+            currentIndex={currentIndex_ref.current}
             playStatus={playStatus}
             onChange={onChange}
           ></MusicPlayCD>
@@ -316,7 +311,7 @@ const MusicPlay = () => {
       <View className="music-play__bottom">
         <MusicPlayBottom
           currentTime={currentTime}
-          durationTime={durationTime}
+          durationTime={durationTime_ref.current}
           sliderValue={sliderValue}
           playStatus={playStatus}
           playBtnClicnFn={playBtnClick}

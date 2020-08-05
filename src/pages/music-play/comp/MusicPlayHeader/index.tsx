@@ -20,7 +20,7 @@ const MusicPlayHeader = (props: IProps) => {
     ar = currentSong.ar.map((x: any) => x.name).join(",");
   } catch (error) {}
 
-  if (ar === "" || name === "") return "";
+  if (ar === "" || name === "") return <View></View>;
   return (
     <View className="music-paly-header">
       <View className="music-paly-header__left" onClick={bacnBtnClick}></View>

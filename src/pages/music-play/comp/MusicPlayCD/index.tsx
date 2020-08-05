@@ -14,7 +14,7 @@ const MusicPlayCD = (props: IProps) => {
   const arr = songTracks.map((x) => {
     return x.al.picUrl;
   });
-  if (arr.length === 0) return "";
+  if (arr.length === 0) return <View></View>;
   return (
     <View className="music-paly-content">
       <View className="music-play__cd-wrap">

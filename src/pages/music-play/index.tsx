@@ -31,11 +31,9 @@ const MusicPlay = () => {
   const [top, set_top] = useState(0); // 歌词面板滚动距离 (歌词面板)
   const [cdAndLyricFlag, set_cdAndLyricFlag] = useState(true); // 唱片 歌词 切换标识
   const [songTracks, set_songTracks] = useState([]); // 播放列表
-  const songTracks_ref: any = useRef(); // 播放列表
+  const songTracks_ref: any = useRef([]); // 播放列表
   const [currentIndex, set_currentIndex] = useState(0); //当前播放序号
-  const currentIndex_ref: any = useRef();
-  const [currentSong, set_currentSong] = useState({}); // 当前播放歌曲
-  const currentSong_ref: any = useRef();
+  const currentIndex_ref: any = useRef(routerParams.num);
 
   useEffect(() => {
     createInnerAudioContext();
@@ -102,7 +100,6 @@ const MusicPlay = () => {
     // 音频播放进度更新事件 包括手动更新
     innerAudioContext.current.onTimeUpdate(() => {
       const { currentTime } = innerAudioContext.current;
-      // console.log("onTimeUpdate", currentTime);
       if (currentTime === 0) {
         return;
       }
@@ -139,9 +136,7 @@ const MusicPlay = () => {
   ): Promise<void> {
     const currentSong = songTracks_ref.current[currentIndex];
     set_currentIndex(currentIndex);
-    set_currentSong(currentSong);
     currentIndex_ref.current = currentIndex;
-    currentSong_ref.current = currentSong;
 
     // 获取 歌曲 歌词
     const [err_lyric, res_lyric] = await Ajax_lyric({
@@ -270,7 +265,8 @@ const MusicPlay = () => {
     set_sliderValue(value);
     set_currentTime(currentTime);
   }
-  if (!currentSong || !currentSong.id) {
+
+  if (songTracks_ref.current.length === 0) {
     return (
       <View className="music-play-page-wrap">
         <AtActivityIndicator
@@ -281,10 +277,11 @@ const MusicPlay = () => {
       </View>
     );
   }
+  const _currentSong = songTracks_ref.current[currentIndex_ref.current];
   return (
     <View className="music-play-page-wrap">
       <View className="music-play__header">
-        <MusicPlayHeader currentSong={currentSong}></MusicPlayHeader>
+        <MusicPlayHeader currentSong={_currentSong}></MusicPlayHeader>
       </View>
       <View
         className="music-play__content"

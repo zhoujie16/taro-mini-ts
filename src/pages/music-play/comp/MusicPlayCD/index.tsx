@@ -9,7 +9,7 @@ interface IProps {
   onChange: any;
 }
 
-const MusicPlayCD = (props: IProps) => {
+export default function (props: IProps) {
   const { playStatus, songTracks, currentIndex, onChange } = props;
   const arr = songTracks.map((x) => {
     return x.al.picUrl;
@@ -88,6 +88,4 @@ const MusicPlayCD = (props: IProps) => {
       </View>
     </View>
   );
-};
-
-export default MusicPlayCD;
+}

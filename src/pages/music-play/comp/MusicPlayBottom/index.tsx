@@ -15,7 +15,7 @@ interface IProps {
   sliderOnChanging: any;
 }
 
-const MusicPlayBottom = (props: IProps) => {
+export default function (props: IProps) {
   function computeTime(count) {
     function PrefixZero(num, n) {
       return (Array(n).join("0") + num).slice(-n);
@@ -87,6 +87,4 @@ const MusicPlayBottom = (props: IProps) => {
       </View>
     </View>
   );
-};
-
-export default MusicPlayBottom;
+}

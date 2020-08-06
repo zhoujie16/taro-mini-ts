@@ -6,7 +6,7 @@ interface IProps {
   curLength: number;
 }
 
-const MusicListNav = (props: IProps) => {
+export default function (props: IProps) {
   const { curLength } = props;
   return (
     <View className="music-list-nav">
@@ -15,6 +15,4 @@ const MusicListNav = (props: IProps) => {
       <View className="music-list-nav__sub-title">({`共${curLength}首`})</View>
     </View>
   );
-};
-
-export default MusicListNav;
+}

@@ -9,7 +9,7 @@ interface IProps {
   cellClickFn: any;
 }
 
-const MusicList = (props: IProps) => {
+export default function (props: IProps) {
   return (
     <View className="music-list">
       <MusicListNav curLength={props.tracks.length}></MusicListNav>
@@ -25,6 +25,4 @@ const MusicList = (props: IProps) => {
       </View>
     </View>
   );
-};
-
-export default MusicList;
+}

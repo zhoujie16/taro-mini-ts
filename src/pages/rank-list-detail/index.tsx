@@ -1,34 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useRouter } from "@tarojs/taro";
 import { View } from "@tarojs/components";
 import "./index.scss";
 import Taro from "@tarojs/taro";
 import HeaderPanel from "@/pages/rank-list-detail/comp/HeaderPanel";
 import MusicList from "@/pages/rank-list-detail/comp/MusicList";
-import { Ajax_playlist_detail } from "@/api/index.ts";
 import { AtActivityIndicator } from "taro-ui";
+import { useGetPlaylist } from "./hooks";
 
-const RankListDetail = () => {
+export default function () {
   const routerParams = useRouter().params;
-  console.log("routerParams", routerParams);
-
-  const [playlist, setPlaylist] = useState({});
-  const [tracks, setTracks] = useState([]);
-
-  useEffect(() => {
-    initPage();
-  }, [0]);
-
-  async function initPage(): Promise<void> {
-    const [err, res] = await Ajax_playlist_detail({
-      id: routerParams.id,
-    });
-    if (err) return;
-    const { playlist } = res;
-    setPlaylist(playlist);
-    setTracks(playlist.tracks);
-  }
-
+  const playlist = useGetPlaylist();
   function goMusicPlayPage(curIndex): void {
     console.log("播放按钮点击", routerParams.id, curIndex);
     // 去播放器页面
@@ -37,7 +19,7 @@ const RankListDetail = () => {
     });
   }
 
-  if (tracks.length === 0) {
+  if (!playlist.id) {
     return (
       <View className="rank-list-page-wrap">
         <AtActivityIndicator
@@ -51,9 +33,10 @@ const RankListDetail = () => {
   return (
     <View className="rank-list-detail-page-wrap">
       <HeaderPanel playlist={playlist}></HeaderPanel>
-      <MusicList tracks={tracks} cellClickFn={goMusicPlayPage}></MusicList>
+      <MusicList
+        tracks={playlist.tracks}
+        cellClickFn={goMusicPlayPage}
+      ></MusicList>
     </View>
   );
-};
-
-export default RankListDetail;
+}

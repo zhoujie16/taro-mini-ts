@@ -48,8 +48,12 @@ const config = {
     },
   },
   h5: {
-    publicPath: "/",
+    publicPath: "/music-163-demo/",
     staticDirectory: "static",
+    router: {
+      // mode: 'hash', // 或者是 'browser'
+      basename: "music-163-demo",
+    },
     postcss: {
       autoprefixer: {
         enable: true,

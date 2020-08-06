@@ -7,7 +7,7 @@ interface IProps {
   onClick: any;
 }
 
-const RankListCell = (props: IProps) => {
+export default function (props: IProps) {
   const { coverImgUrl, tracks, id, updateFrequency } = props.detailInfo;
   return (
     <View onClick={() => props.onClick(id)} className="rank-list-cell">
@@ -26,6 +26,4 @@ const RankListCell = (props: IProps) => {
       </View>
     </View>
   );
-};
-
-export default RankListCell;
+}

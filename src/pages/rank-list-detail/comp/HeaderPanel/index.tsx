@@ -6,7 +6,7 @@ interface IProps {
   playlist: any;
 }
 
-const HeaderPanel = (props: IProps) => {
+export default function (props: IProps) {
   const { coverImgUrl, name, description, creator } = props.playlist;
 
   return (
@@ -38,6 +38,4 @@ const HeaderPanel = (props: IProps) => {
       </View>
     </View>
   );
-};
-
-export default HeaderPanel;
+}

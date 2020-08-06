@@ -8,7 +8,7 @@ interface IProps {
   cellClickFn: any;
 }
 
-const MusicListCell = (props: IProps) => {
+export default function (props: IProps) {
   const { curIndex, musicInfo, cellClickFn } = props;
 
   function filterSubTitle(): string {
@@ -29,6 +29,4 @@ const MusicListCell = (props: IProps) => {
       </View>
     </View>
   );
-};
-
-export default MusicListCell;
+}

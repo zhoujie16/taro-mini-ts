@@ -8,128 +8,19 @@ import MusicPlayBottom from "./comp/MusicPlayBottom";
 import MusicPlayCD from "./comp/MusicPlayCD";
 import MusicPlayLyric from "./comp/MusicPlayLyric";
 import MusicPlayHeader from "./comp/MusicPlayHeader";
-import LyricContext from "./comp/MusicPlayLyric/lyric-parser";
 import {
-  Ajax_lyric,
-  Ajax_song_url,
-  Ajax_playlist_detail,
-} from "@/api/index.ts";
+  useGetSongTracks,
+  useGetCurrentSong,
+  useGetLyric,
+  useGetSongUrl,
+  useGetLyricAndSliderState,
+} from "./hooks";
 
-// 获取歌曲播放列表的 Hook
-function useGetSongTracks(): any {
-  const routerParams: any = useRouter().params;
-  const [songTracks, set_songTracks] = useState([]);
-  useEffect(() => {
-    (async function () {
-      const [err_songTracks, res_songTracks] = await Ajax_playlist_detail({
-        id: routerParams.id,
-      });
-      if (err_songTracks) return;
-      const _songTracks = res_songTracks.playlist.tracks;
-      console.log("songTracks", _songTracks);
-      // 设置播放列表
-      set_songTracks(_songTracks);
-    })();
-  }, []);
-
-  return songTracks;
-}
-
-// 获取 当前播放歌曲的Hook
-function useGetCurrentSong(songTracks: any[], currentIndex: number): any {
-  const [currentSong, set_currentSong] = useState({});
-  useEffect(() => {
-    if (songTracks.length) {
-      set_currentSong(songTracks[currentIndex]);
-    }
-  }, [songTracks, currentIndex]);
-  return currentSong;
-}
-
-// 获取歌词 解析歌词 的 Hook
-function useGetLyric(currentSong: any): any {
-  const [songLyricLines, set_songLyricLines] = useState([]);
-  useEffect(() => {
-    (async () => {
-      if (currentSong.id) {
-        // 获取 歌曲 歌词
-        const [err_lyric, res_lyric] = await Ajax_lyric({
-          id: currentSong.id,
-        });
-        if (err_lyric) return;
-        console.log("res_lyric", res_lyric);
-        const songLyric = res_lyric.lrc.lyric;
-        // // 解析歌词
-        const lyricContext: any = new LyricContext(songLyric, () => {});
-        set_songLyricLines(lyricContext.lines);
-      }
-    })();
-  }, [currentSong]);
-  return songLyricLines;
-}
-
-// 获取歌曲播放信息的Hook
-function useGetSongUrl(currentSong: any) {
-  const [songUrl, set_songUrl] = useState("");
-  useEffect(() => {
-    (async () => {
-      const id = currentSong.id;
-      if (id) {
-        // 获取 歌曲 播放 链接
-        const [err_song_url, res_song_url] = await Ajax_song_url({
-          id: currentSong.id,
-        });
-        if (err_song_url) return;
-        console.log("res_song_url", res_song_url);
-        const _songUrl = res_song_url.data[0].url;
-        set_songUrl(_songUrl);
-      }
-    })();
-  }, [currentSong]);
-  return songUrl;
-}
-
-// 获取 歌词状态和滑块的Hook
-function useGetLyricAndSliderState(
-  songLyricLines: any[],
-  currentTime: number
-): any {
-  const [lines, set_lines] = useState([]); // 歌词面板用的歌词 (歌词面板)
-  const [top, set_top] = useState(0); // 歌词面板滚动距离 (歌词面板)
-  useEffect(() => {
-    (async () => {
-      let top = 0;
-      const lines: any = songLyricLines.map((x, index) => ({
-        ...x,
-        index,
-        active: false,
-      }));
-      lines.forEach((x) => (x.active = false));
-      const lineItemIndex = lines.findIndex((item) => {
-        return item.time >= currentTime * 1000;
-      });
-      if (lineItemIndex > 0) {
-        const lineItem = lines[lineItemIndex - 1];
-        lineItem.active = true;
-        top = lineItem.index * 40;
-        // console.log(lineItem);
-      }
-      set_lines(lines);
-      set_top(top);
-    })();
-  }, [currentTime]);
-  return {
-    lines,
-    top,
-  };
-}
-
-const MusicPlay = () => {
+export default function () {
   const routerParams: any = useRouter().params; // 路由传参
   const innerAudioContext: any = useRef(null); // 音乐播放上下文
-  // const songLyricLines: any = useRef([]); // 歌词格式化的数组
   const timer_play: any = useRef(null); // 防抖定时器
-  const isSliding: any = useRef(false); // 是否在拖动进度条
+  const isSliding_ref = useRef(false); // 是否在拖动进度条
   const [playStatus, set_playStatus] = useState("stop"); // 播放状态 播放 play  暂停 stop  等待 wait
   const [durationTime, set_durationTime] = useState(0); // 总进度 (进度条用)
   const [sliderValue, set_sliderValue] = useState(0); // 进度条值 (进度条用)
@@ -157,12 +48,12 @@ const MusicPlay = () => {
   }, [songUrl]);
 
   useEffect(() => {
-    set_currentIndex(routerParams.num);
+    const num = Number(routerParams.num);
+    set_currentIndex(num);
   }, [songTracks]);
 
   useEffect(() => {
     const sliderValue = (currentTime / durationTime) * 100;
-    // console.log("计算 sliderValue", sliderValue);
     set_sliderValue(sliderValue);
   }, [currentTime]);
 
@@ -200,17 +91,18 @@ const MusicPlay = () => {
     innerAudioContext.current.onEnded(() => {
       console.log("onEnded");
       set_playStatus("stop");
-      // nextBtnClick();
+      nextBtnClick();
     });
-
+    console.log(isSliding_ref.current);
     // 音频播放进度更新事件 包括手动更新
     innerAudioContext.current.onTimeUpdate(() => {
       const { currentTime } = innerAudioContext.current;
       if (currentTime === 0) {
         return;
       }
-      set_currentTime(currentTime);
-      // setLyricAndSliderState(currentTime);
+      if (!isSliding_ref.current) {
+        set_currentTime(currentTime);
+      }
       set_playStatus("play");
     });
 
@@ -280,38 +172,44 @@ const MusicPlay = () => {
     set_playStatus("stop");
   }
 
-  // 设置 歌词面板数据状态 和 滑块状态
-  // function setLyricAndSliderState(currentTime: number): void {}
-
   function musicPlayBodyClick(): void {
     console.log("musicPlayBodyClick", cdAndLyricFlag);
     set_cdAndLyricFlag(!cdAndLyricFlag);
   }
 
-  function onChange(e) {
+  function onChange(e: any) {
     console.log("CD onChange", e.detail);
     pauseMusic();
     set_currentIndex(e.detail.current);
-    // setCurrentSong(e.detail.current, true);
   }
 
   // 滑块事件 滑块结束
   function sliderOnChange(value) {
-    // isSliding.current = false;
-    // console.warn("sliderOnChange", value, durationTime);
-    // const seekTime = durationTime_ref.current * (value / 100);
-    // // 指定位置
-    // innerAudioContext.current.seek(seekTime);
-    // playMusic();
+    // set_isSliding(false);
+    isSliding_ref.current = false;
+    console.log("sliderOnChange", {
+      isSliding: isSliding_ref.current,
+      value,
+      durationTime,
+    });
+    const seekTime = durationTime * (value / 100);
+    // 指定位置
+    innerAudioContext.current.seek(seekTime);
+    playMusic();
   }
 
   // 滑块滑动
   function sliderOnChanging(value) {
-    // isSliding.current = true;
-    // const currentTime = durationTime * (value / 100);
-    // console.warn("sliderOnChanging", value, currentTime);
-    // set_sliderValue(value);
-    // set_currentTime(currentTime);
+    // set_isSliding(true);
+    isSliding_ref.current = true;
+    const currentTime = durationTime * (value / 100);
+    console.log("sliderOnChanging", {
+      isSliding: isSliding_ref.current,
+      value,
+      currentTime,
+    });
+    set_currentTime(currentTime);
+    set_sliderValue(value);
   }
 
   if (songTracks.length === 0) {
@@ -325,7 +223,7 @@ const MusicPlay = () => {
       </View>
     );
   }
-  // const _currentSong = songTracks_ref.current[currentIndex_ref.current];
+
   return (
     <View className="music-play-page-wrap">
       <View className="music-play__header">
@@ -377,6 +275,4 @@ const MusicPlay = () => {
       {/* <View className="music-play__bottom-span"></View> */}
     </View>
   );
-};
-
-export default MusicPlay;
+}

@@ -7,7 +7,7 @@ interface IProps {
   top: number;
 }
 
-const MusicPlayLyric = (props: IProps) => {
+export default function (props: IProps) {
   const { top, lines } = props;
   return (
     <View className="music-play-lyric">
@@ -38,6 +38,4 @@ const MusicPlayLyric = (props: IProps) => {
       </View>
     </View>
   );
-};
-
-export default MusicPlayLyric;
+}

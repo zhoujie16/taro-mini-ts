@@ -1,28 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { View } from "@tarojs/components";
 import "./index.scss";
 import Taro from "@tarojs/taro";
 import { AtActivityIndicator } from "taro-ui";
 import RankListCell from "./comp/RankListCell";
 import RankListCard from "./comp/RankListCard";
-import { Ajax_toplist_detail } from "@/api/index.ts";
+import { useGetRankList } from "./hooks";
 
-function RankList() {
-  const [rankList, setRankList] = useState([]);
-  const [rankList_other, setRankList_other] = useState([]);
-
-  useEffect(() => {
-    console.log("useEffect");
-    initPage();
-  }, [0]);
-
-  // 初始化
-  async function initPage(): Promise<void> {
-    const [err, res] = await Ajax_toplist_detail();
-    if (err) return;
-    setRankList(res.list.slice(0, 4));
-    setRankList_other(res.list.slice(4, res.list.length));
-  }
+export default function RankList() {
+  const { rankList, rankList_other } = useGetRankList();
 
   // 点击事件
   async function rankListCellClick(id: string): Promise<void> {
@@ -78,5 +64,3 @@ function RankList() {
     </View>
   );
 }
-
-export default RankList;

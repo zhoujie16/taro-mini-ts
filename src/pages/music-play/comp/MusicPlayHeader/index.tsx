@@ -7,7 +7,7 @@ interface IProps {
   currentSong: any;
 }
 
-const MusicPlayHeader = (props: IProps) => {
+export default function (props: IProps) {
   // 返回按钮事件
   function bacnBtnClick(): void {
     Taro.navigateBack();
@@ -31,6 +31,4 @@ const MusicPlayHeader = (props: IProps) => {
       <View className="music-paly-header__right"></View>
     </View>
   );
-};
-
-export default MusicPlayHeader;
+}

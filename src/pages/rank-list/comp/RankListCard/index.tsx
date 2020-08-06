@@ -7,7 +7,7 @@ interface IProps {
   onClick: any;
 }
 
-const RankListCard = (props: IProps) => {
+export default function (props: IProps) {
   const { detailInfo } = props;
   const { id, coverImgUrl, name, updateFrequency } = detailInfo;
   return (
@@ -21,6 +21,4 @@ const RankListCard = (props: IProps) => {
       </View>
     </View>
   );
-};
-
-export default RankListCard;
+}
